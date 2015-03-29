@@ -1,3 +1,8 @@
+/*!
+ * Responsive Image jQuery Plugin (c) 2015, OCHIISHI Koichiro
+ * MIT license
+ * https://github.com/rakuishi/jquery-responsive-image
+ */
 ;(function($, undefined) {
   $.fn.responsiveImage = function(options) {
 
@@ -32,11 +37,10 @@
             continue;
           }
 
-          if ($(this).attr(devices[i].attr) === $(this).attr('src')) {
-            break;
+          if ($(this).attr(devices[i].attr) !== $(this).attr('src')) {
+            $(this).attr('src', $(this).attr(devices[i].attr));
           }
 
-          $(this).attr('src', $(this).attr(devices[i].attr));
           break;
         }
       });
@@ -44,6 +48,5 @@
 
     handler.apply();
     $(window).resize(handler);
-
   }
 })(jQuery);
