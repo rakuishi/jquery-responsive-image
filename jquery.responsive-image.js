@@ -1,36 +1,49 @@
 ;(function($, undefined) {
-  var mobile = 400, phablet = 550, tablet = 750, desktop = 1000;
-  var devices = ['data-mobile', 'data-phablet', 'data-tablet', 'data-desktop'];
-  var sizes = [mobile, phablet, tablet, desktop];
+  $.fn.responsiveImage = function(options) {
 
-  var handler = function() {
-    var width = window.innerWidth;
-    var num = 0;
+    var settings = $.extend({
+      mobile : 400,
+      phablet: 550,
+      tablet : 750,
+      desktop: 1000,
+    }, options);
 
-    for (var i = sizes.length; i--;) {
-      if (width >= sizes[i]) {
-        num = i;
-        break;
-      }
-    }
+    var devices = [
+      { attr: 'data-mobile' , width: settings.mobile  },
+      { attr: 'data-phablet', width: settings.phablet },
+      { attr: 'data-tablet' , width: settings.tablet  },
+      { attr: 'data-desktop', width: settings.desktop },
+    ];
 
-    $('img').each(function() {
-      for (var i = num; i >= 0 ; i--) {
-        if ($(this).attr(devices[i]) === undefined) {
-          continue;
-        }
+    var handler = function() {
+      var width = window.innerWidth;
+      var num = 0;
 
-        if ($(this).attr(devices[i]) === $(this).attr('src')) {
+      for (var i = devices.length; i--;) {
+        if (width >= devices[i].width) {
+          num = i;
           break;
         }
-
-        $(this).attr('src', $(this).attr(devices[i]));
-        break;
       }
-    });
-  };
 
-  handler.apply();
-  $(window).resize(handler);
+      $('img').each(function() {
+        for (var i = num; i >= 0 ; i--) {
+          if ($(this).attr(devices[i].attr) === undefined) {
+            continue;
+          }
 
+          if ($(this).attr(devices[i].attr) === $(this).attr('src')) {
+            break;
+          }
+
+          $(this).attr('src', $(this).attr(devices[i].attr));
+          break;
+        }
+      });
+    };
+
+    handler.apply();
+    $(window).resize(handler);
+
+  }
 })(jQuery);
